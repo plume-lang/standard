@@ -91,12 +91,6 @@ fn split_on<A extends equality>(x: [A], y: A): [[A]] => switch x {
   }
 }
 
-fn init<A>(x: [A]): [A] => switch x {
-  case [] => []
-  case [y] => []
-  case [y, ..ys] => init(ys).list_concat([y])
-}
-
 fn join<A>(x: [A], y: A): [A] => switch x {
   case [] => []
   case [z] => [z]
@@ -166,8 +160,8 @@ fn last<A>(xs: list<A>): Option<A> =>
   xs.foldl(fn(acc, z) => Some(z), None)
 
 fn init<A>(xs: list<A>): list<A> => switch xs {
-  case [y, ..ys] => list_concat([y], init(ys))
-  case [?] => []
+  case [x] => []
+  case [y, ..ys] => [y]
   case [] => []
 }
 
@@ -187,17 +181,11 @@ fn take<A>(xs: list<A>, count: int): list<A> =>
     case ([y, ..ys], ?) => [y].list_concat(take(ys, count - 1))
   }
 
-fn any<A>(f: fn(A): bool, xs: list<A>): bool =>
-  switch xs {
-    case [] => false
-    case [y, ..ys] => f(y) or any(f, ys)
-  }
-  
-fn all<A>(f: fn(A): bool, xs: list<A>): bool =>
-  switch xs {
-    case [] => false
-    case [y, ..ys] => f(y) and all(f, ys)
-  }
+fn any<A, T extends foldable>(f: fn(A): bool, xs: T<A>): bool =>
+  xs.foldl(or, false)
+
+fn all<A, T extends foldable>(f: fn(A): bool, xs: T<A>): bool =>
+  xs.foldl(and, false)
 
 fn concat<T extends foldable, A extends (numeric, default)>(x: T<A>): A =>
   x.foldl(fn(acc, y) => acc + y, default())
