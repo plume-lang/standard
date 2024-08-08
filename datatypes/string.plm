@@ -1,6 +1,7 @@
 require "bool"
 require "list"
 require "char"
+require "std:classes"
 
 native ("native", "js") "std:native" {
   add_str(x: str, y: str): str
@@ -16,73 +17,4 @@ extend show<str> (priority 5) {
     case 0 => x
     case ? => list_concat("\"", list_concat(x, "\""))
   }
-}
-
-// Inserting a `sep`arator between each element of the list
-// and concatenating the result into a single string.
-pub fn join_str(c: [str], sep: str) =>
-  switch c {
-    case [] => ""
-    case [x] => x
-    case [x, ..xs] => x + sep + xs.join_str(sep)
-  }
-
-pub fn unlines(lines: [str]): str => lines.join_str("\n").show()
-
-pub fn str_to_list(string: str): [str] {
-    mut result: [str] = []
-    mut i = 0
-
-    while *i < string_length(string) {
-        _i = *i
-        chr = string[_i]
-        result += switch chr {
-            case None => []
-            case Some(chr) => [char_to_string(chr)]
-        }
-        i += 1
-    }
-    return *result
-}
-
-pub fn str_split(string: str, delimiter: str): [str] {
-    delimiter_length = string_length(delimiter)
-    string_len = string_length(string)
-    mut result: [str] = []
-    mut word = ""
-    mut i = 0
-
-    while *i < string_len {
-        if str_slice(string, *i, *i + delimiter_length) == delimiter {
-            if *word == "" {}
-            else {
-                result += [*word]
-                word = ""
-            }
-            i += delimiter_length
-        } else {
-            _i = *i
-            chr = string[_i]
-            word += switch chr {
-                case None => ""
-                case Some(chr) => char_to_string(chr)
-            }
-            i += 1
-        }
-    }
-
-    if *word == "" {}
-    else {
-        result += [*word]
-    }
-
-    return *result
-}
-
-// clearing all spaces in a string
-pub fn str_strip(string: str): str {
-    mut result: str = join_str(str_split(string, "\t"), "")
-    result = join_str(str_split(*result, "\n"), "")
-    result = join_str(str_split(*result, " "), "")
-    return *result
 }
