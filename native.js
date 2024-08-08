@@ -26,7 +26,7 @@ async function doesFileExist(path) {
 }
 
 module.exports = {
-  to_string: (e) => e.toString(),
+  to_string: (e) => e.toString().split(''),
   add_str: (a, b) => a + b,
   mul_str: (a, b) => a * b,
   string_length: (s) => s.length,
@@ -48,6 +48,7 @@ module.exports = {
 
     return [null, "Option", "None"];
   },
+
   async write_file(path, content) {
     if (await doesFileExist(path)) {
       try {
@@ -77,7 +78,7 @@ module.exports = {
     .catch(() => false),
 
   ffi_print: (s) => process.stdout.write(s),
-  ffi_println: (s) => console.log(s),
+  ffi_println: (s) => console.log(s.join('')),
   get_args: () => process.argv.slice(2),
   execute_command(cmd) {
     try {
