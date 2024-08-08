@@ -1,7 +1,5 @@
 require "number"
-require "tuple"
 require "std:classes"
-require "option"
 require "bool"
 
 native ("native", "js") "std:native" {
@@ -40,12 +38,12 @@ fn elem<T extends foldable, A extends equality>(x: T<A>, y: A) =>
 fn showListHelper<A extends show>(ls: list<A>, prec: int): str => switch ls {
   case [] => ""
   case [x] => x.show_prec(prec + 1)
-  case [x, ..xs] => x.show_prec(prec + 1) + ", " + showListHelper(xs, prec)
+  case [x, ..xs] => x.show_prec(prec + 1).list_concat(", ".list_concat(showListHelper(xs, prec)))
 }
 
 extend<A extends show> show<list<A>> {
   fn show_prec(self: list<A>, prec): str => 
-    "[" + showListHelper(self, prec) + "]"
+    "[".list_concat(showListHelper(self, prec).list_concat("]"))
 }
 
 extend<A extends equality> numeric<list<A>> {

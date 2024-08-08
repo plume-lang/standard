@@ -1,5 +1,6 @@
 require "bool"
-require "std:classes"
+require "list"
+require "char"
 
 native ("native", "js") "std:native" {
   add_str(x: str, y: str): str
@@ -10,24 +11,11 @@ native ("native", "js") "std:native" {
   str_slice(x: str, start: int, end: int): str
 }
 
-extend numeric<str> {
-  fn (+) (x: str, y: str) => add_str(x, y)
-  fn (-) (x: str, y: str) => x
-}
-
-extend equality<str> {
-  fn (==) (x: str, y: str) => eq_string(x, y)
-}
-
-extend show<str> {
+extend show<str> (priority 5) {
   fn show_prec(x: str, prec: int) => switch prec {
     case 0 => x
-    case ? => "\"" + x + "\""
+    case ? => list_concat("\"", list_concat(x, "\""))
   }
-}
-
-extend indexable<str, char> {
-  fn get_index(self: str, i): Option<char> => get_index_str(self, i)
 }
 
 // Inserting a `sep`arator between each element of the list
