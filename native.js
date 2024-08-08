@@ -42,17 +42,17 @@ module.exports = {
   show_bool: (b) => b ? "true" : "false",
 
   async read_file(path) {
-    if (await doesFileExist(path)) {
-      return [null, "Option", "Some", await fs.readFile(path, 'utf-8')];
+    if (await doesFileExist(path.join(''))) {
+      return [null, "Option", "Some", await fs.readFile(path.join(''), 'utf-8')];
     }
 
     return [null, "Option", "None"];
   },
 
   async write_file(path, content) {
-    if (await doesFileExist(path)) {
+    if (await doesFileExist(path.join(''))) {
       try {
-        await fs.writeFile(path, content);
+        await fs.writeFile(path.join(''), content.join(''));
         return true;
       } catch {
         return false;
@@ -62,9 +62,10 @@ module.exports = {
     return false;
   },
   async append_file(path, content) {
-    if (await doesFileExist(path)) {
+    const pathToString = path.join('');
+    if (await doesFileExist(pathToString)) {
       try {
-        await fs.appendFile(path, content);
+        await fs.appendFile(pathToString, content.join(''));
         return true;
       } catch {
         return false;
@@ -77,12 +78,12 @@ module.exports = {
     .then(() => true)
     .catch(() => false),
 
-  ffi_print: (s) => process.stdout.write(s),
+  ffi_print: (s) => process.stdout.write(s.join('')),
   ffi_println: (s) => console.log(s.join('')),
   get_args: () => process.argv.slice(2),
   execute_command(cmd) {
     try {
-      childProcess.execSync(cmd);
+      childProcess.execSync(cmd.join(''));
       return 1;
     } catch {
       return 0;
@@ -94,7 +95,7 @@ module.exports = {
       output: process.stdout
     });
 
-    rl.question(prompt, (answer) => {
+    rl.question(prompt.join(''), (answer) => {
       rl.close();
       resolve(answer);
     });
@@ -138,12 +139,12 @@ module.exports = {
 
   fetch: async(url) => {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url.join(''));
       const txt = await res.text();
 
-      return [null, "Result", "Ok", txt];
+      return [null, "Result", "Ok", txt.split('')];
     } catch (e) {
-      return [null, "Result", "Error", e.toString()];
+      return [null, "Result", "Error", e.toString().split('')];
     }
   },
 
