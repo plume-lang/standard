@@ -161,7 +161,7 @@ fn last<A>(xs: list<A>): Option<A> =>
 
 fn init<A>(xs: list<A>): list<A> => switch xs {
   case [x] => []
-  case [y, ..ys] => [y]
+  case [y, ..ys] => [y].list_concat(init(ys))
   case [] => []
 }
 
