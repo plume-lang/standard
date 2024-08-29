@@ -2,61 +2,36 @@ require "std:classes"
 require "option"
 require "tuple"
 
-type Map<V> {
-  Node(str, V, Map<V>),
-  Empty
-}
+type Map<K, V> = list<(K, V)>
 
-fn showHelper<V extends show>(m: Map<V>, i: int): str =>
+fn empty<K, V>(): Map<K, V> => []
+
+fn insert<K extends equality, V extends equality>(m: Map<K, V>, k: K, v: V): Map<K, V> => 
   switch m {
-    case Node(k, v, Empty) => k + " -> " + show_prec(v, i + 1)
-    case Node(k, v, rest) => k + " -> " + show_prec(v, i + 1) + ", " + showHelper(rest, i)
-    case Empty => ""
+    case [] => [(k, v)]
+    case [(k1, v1), ..m1] => 
+      if k == k1 then
+        [(k, v)] + m1
+      else
+        [(k1, v1)] + insert(m1, k, v)
   }
 
-extend<V extends show> show<Map<V>> {
-  fn show_prec(m, i) =>
-    "{ " + showHelper(m, i) + " }" 
-}
-
-fn empty<V>(): Map<V> => Empty
-
-fn insert<V>(k: str, v: V, m: Map<V>): Map<V> =>
+fn lookup<K extends equality, V>(m: Map<K, V>, k: K): Option<V> =>
   switch m {
-    case Node(k1, v1, rest) => 
-      if (k1 == k) Node(k1, v, rest)
-      else Node(k1, v1, insert(k, v, rest))
-    case Node(k1, v1, rest) => 
-      Node(k1, v1, insert(k, v, rest))
-    case Empty => 
-      Node(k, v, Empty)
+    case [] => None
+    case [(k1, v1), ..m1] =>
+      if k == k1 then
+        Some(v1)
+      else
+        lookup(m1, k)
   }
 
-fn from_list<V>(l: list<(str, V)>): Map<V> =>
-  l.foldl(fn(acc, el) => switch el {
-    case (k, v) => insert(k, v, acc)
-  }, Empty)
-
-fn to_list<V extends equality>(m: Map<V>): list<(str, V)> =>
+fn remove<K extends equality, V>(m: Map<K, V>, k: K): Map<K, V> =>
   switch m {
-    case Node(k, v, rest) => [(k, v)] + to_list(rest)
-    case Empty => []
+    case [] => []
+    case [(k1, v1), ..m1] =>
+      if k == k1 then
+        m1
+      else
+        [(k1, v1)] + remove(m1, k)
   }
-
-fn get<V>(m: Map<V>, k: str): Option<V> =>
-  switch m {
-    case Node(k1, v, rest) => 
-      if (k1 == k) Some(v) else get(rest, k)
-    case Node(_, _, rest) => 
-      get(rest, k)
-    case Empty =>
-      None
-  }
-
-extend foldable<Map> {
-  fn foldl(m, f, acc) =>
-    switch m {
-      case Node(?, v, rest) => rest.foldl(f, f(acc, v))
-      case Empty => acc
-    }
-}
