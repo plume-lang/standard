@@ -1,5 +1,6 @@
 require "std:classes"
-require "list"
+
+type tuple<A, B> { tuple(A, B) }
 
 extend<A extends show, B extends show> show<tuple<A, B>> {
   fn show_prec(t: tuple<A, B>, prec): str => switch t {

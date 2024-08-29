@@ -1,6 +1,11 @@
+require "string"
 require "std:classes"
-require "list"
-require "char"
+require "tuple"
+
+type Option<T> {
+  Some(T),
+  None
+}
 
 // When the condition is true, the function is called and the result
 // is wrapped in a Some.

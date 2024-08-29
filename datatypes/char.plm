@@ -1,12 +1,9 @@
+require "string"
 require "std:classes"
 
 native ("native", "js") "std:native" {
-  eq_char(x: char, y: char): bool
   char_to_string(x: char): str
-}
-
-extend equality<char> {
-  fn (==) (c: char, d: char) => eq_char(c, d)
+  eq_char(x: char, y: char): bool
 }
 
 extend show<char> {
@@ -14,4 +11,8 @@ extend show<char> {
     case 0 => char_to_string(c)
     case _ => "'" + char_to_string(c) + "'"
   }
+}
+
+extend equality<char> {
+  fn (==) (c: char, d: char) => eq_char(c, d)
 }

@@ -5,13 +5,6 @@ native "native" "std:native" {
 }
 native "js" "std:native" to_string<A>(x: A): str
 
-type tuple<A, B> { tuple(A, B) }
-
-type Option<T> {
-  Some(T),
-  None
-}
-
 interface<A> show<A> {
   fn show_prec(a: A, prec: int): str
 }

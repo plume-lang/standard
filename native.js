@@ -26,7 +26,7 @@ async function doesFileExist(path) {
 }
 
 module.exports = {
-  to_string: (e) => e.toString().split(''),
+  to_string: (e) => e.toString(),
   add_str: (a, b) => a + b,
   mul_str: (a, b) => a * b,
   string_length: (s) => s.length,
@@ -42,17 +42,16 @@ module.exports = {
   show_bool: (b) => b ? "true" : "false",
 
   async read_file(path) {
-    if (await doesFileExist(path.join(''))) {
-      return [null, "Option", "Some", await fs.readFile(path.join(''), 'utf-8')];
+    if (await doesFileExist(path)) {
+      return [null, "Option", "Some", await fs.readFile(path, 'utf-8')];
     }
 
     return [null, "Option", "None"];
   },
-
   async write_file(path, content) {
-    if (await doesFileExist(path.join(''))) {
+    if (await doesFileExist(path)) {
       try {
-        await fs.writeFile(path.join(''), content.join(''));
+        await fs.writeFile(path, content);
         return true;
       } catch {
         return false;
@@ -62,10 +61,9 @@ module.exports = {
     return false;
   },
   async append_file(path, content) {
-    const pathToString = path.join('');
-    if (await doesFileExist(pathToString)) {
+    if (await doesFileExist(path)) {
       try {
-        await fs.appendFile(pathToString, content.join(''));
+        await fs.appendFile(path, content);
         return true;
       } catch {
         return false;
@@ -78,12 +76,12 @@ module.exports = {
     .then(() => true)
     .catch(() => false),
 
-  ffi_print: (s) => process.stdout.write(s.join('')),
-  ffi_println: (s) => console.log(s.join('')),
+  ffi_print: (s) => process.stdout.write(s),
+  ffi_println: (s) => console.log(s),
   get_args: () => process.argv.slice(2),
   execute_command(cmd) {
     try {
-      childProcess.execSync(cmd.join(''));
+      childProcess.execSync(cmd);
       return 1;
     } catch {
       return 0;
@@ -95,7 +93,7 @@ module.exports = {
       output: process.stdout
     });
 
-    rl.question(prompt.join(''), (answer) => {
+    rl.question(prompt, (answer) => {
       rl.close();
       resolve(answer);
     });
@@ -139,12 +137,12 @@ module.exports = {
 
   fetch: async(url) => {
     try {
-      const res = await fetch(url.join(''));
+      const res = await fetch(url);
       const txt = await res.text();
 
-      return [null, "Result", "Ok", txt.split('')];
+      return [null, "Result", "Ok", txt];
     } catch (e) {
-      return [null, "Result", "Error", e.toString().split('')];
+      return [null, "Result", "Error", e.toString()];
     }
   },
 
