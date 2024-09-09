@@ -52,7 +52,7 @@ extend show<int> {
   fn show_prec(c: int, _) => to_string(c)
 }
 
-fn (%) (c: int, d: int) => mod_int(c, d)
+fn (%) (c: int, d: int): int => mod_int(c, d)
 
 extend equality<int> {
   fn (==) (x: int, y: int) => eq_int(x, y)

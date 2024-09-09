@@ -28,13 +28,13 @@ extend foldable<list> {
   }
 }
 
-fn len<T extends foldable, A>(x: T<A>) => 
+fn len<T extends foldable, A>(x: T<A>): int => 
   x.foldl(fn (acc, _) => acc + 1, 0)
 
-fn filter<A>(x: list<A>, f: fn(A): bool) => 
+fn filter<A>(x: list<A>, f: fn(A): bool): list<A> => 
   x.foldl(fn (acc, y) => if (f(y)) acc.list_concat([y]) else acc, [])
 
-fn elem<T extends foldable, A extends equality>(x: T<A>, y: A) => 
+fn elem<T extends foldable, A extends equality>(x: T<A>, y: A): bool => 
   x.foldl(fn (acc, z) => acc or z == y, false)
 
 fn showListHelper<A extends show>(ls: list<A>, prec: int): str => switch ls {
