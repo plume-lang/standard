@@ -1,0 +1,28 @@
+require "bool"
+require "std:classes"
+
+native ("native", "js") "std:native" {
+  add_str(x: str, y: str): str
+  mul_str(x: str, y: int): str
+  string_length(x: str): int
+  eq_string(x: str, y: str): bool
+  get_index_str(x: str, i: int): Option<char>
+  str_slice(x: str, start: int, end: int): str
+}
+
+extend numeric<str> {
+  fn (+) (x: str, y: str) => add_str(x, y)
+  fn (-) (x: str, y: str) => x
+}
+
+extend equality<str> {
+  fn (==) (x: str, y: str) => eq_string(x, y)
+}
+
+extend indexable<str, char> {
+  fn get_index(self: str, i): Option<char> => get_index_str(self, i)
+}
+
+extend<A extends show> show<mut A> {
+  fn show_prec(c: mut A, prec: int): str => "mut " + c->show_prec(prec + 1)
+}

@@ -11,7 +11,3 @@ pub require "datatypes/char"
 pub require "datatypes/result"
 pub require "datatypes/map"
 // require "datatypes/complex"
-
-extend<A extends show> show<mut A> {
-  fn show_prec(c: mut A, prec: int): str => "mut " + c->show_prec(prec + 1)
-}

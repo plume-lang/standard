@@ -3,6 +3,7 @@ require "std:datatypes/list"
 require "std:datatypes/option"
 require "std:datatypes/tuple"
 require "std:datatypes/char"
+require "std:datatypes/string"
 
 extend show<char> {
   fn show_prec(c: char, prec: int) => switch prec {
@@ -22,13 +23,6 @@ extend<A extends show> show<list<A>> {
     "[" + showListHelper(self, prec) + "]"
 }
 
-extend show<str> (priority 5) {
-  fn show_prec(x: str, prec: int) => switch prec {
-    case 0 => x
-    case ? => "\"" + x + "\""
-  }
-}
-
 extend<A extends show, B extends show> show<tuple<A, B>> {
   fn show_prec(t: tuple<A, B>, prec): str => switch t {
     case tuple(a, b) => "(" + show_prec(a, prec + 1) + ", " + show_prec(b, prec + 1) + ")"
@@ -39,5 +33,19 @@ extend<A extends show> show<Option<A>> {
   fn show_prec(o: Option<A>, prec: int): str => switch o {
     case Some(x) => "Some(" + x.show_prec(prec + 1) + ")"
     case None => "None"
+  }
+}
+
+extend<A extends show, B extends show> show<Result<A, B>> {
+  fn show_prec(self: Result<A, B>, prec: int): str => switch self {
+    case Error(a) => "Error(" + a.show_prec(prec + 1) + ")"
+    case Ok(b) => "Ok(" + b.show_prec(prec + 1) + ")"
+  }
+}
+
+extend show<str> {
+  fn show_prec(x: str, prec: int) => switch prec {
+    case 0 => x
+    case ? => "\"" + x + "\""
   }
 }
