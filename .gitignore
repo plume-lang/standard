@@ -3,3 +3,4 @@ compile_commands.json
 native.plmc
 xmake.lua
 thread.c
+.DS_Store
