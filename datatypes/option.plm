@@ -1,4 +1,3 @@
-require "string"
 require "std:classes"
 require "tuple"
 
@@ -44,14 +43,6 @@ fn while_<A>(cond: fn(): bool, body: fn(): Control<A>): Option<A> =>
   } else {
     return None
   }
-
-
-extend<A extends show> show<Option<A>> {
-  fn show_prec(o: Option<A>, prec: int): str => switch o {
-    case Some(x) => "Some(" + x.show_prec(prec + 1) + ")"
-    case None => "None"
-  }
-}
 
 extend<A> boolean_algebra<Option<A>> {
   fn and(a: Option<A>, b: Option<A>): Option<A> => switch a {

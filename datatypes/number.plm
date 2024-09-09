@@ -25,7 +25,6 @@ native ("native", "js") "std:native" {
   lt_float(x: float, y: float): bool
 }
 
-require "string"
 require "bool"
 
 infixr 2 !=

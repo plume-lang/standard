@@ -3,6 +3,7 @@ require "tuple"
 require "std:classes"
 require "option"
 require "bool"
+require "char"
 
 native ("native", "js") "std:native" {
   list_concat<A>(x: [A], y: [A]): [A]
@@ -36,17 +37,6 @@ fn filter<A>(x: list<A>, f: fn(A): bool): list<A> =>
 
 fn elem<T extends foldable, A extends equality>(x: T<A>, y: A): bool => 
   x.foldl(fn (acc, z) => acc or z == y, false)
-
-fn showListHelper<A extends show>(ls: list<A>, prec: int): str => switch ls {
-  case [] => ""
-  case [x] => x.show_prec(prec + 1)
-  case [x, ..xs] => x.show_prec(prec + 1) + ", " + showListHelper(xs, prec)
-}
-
-extend<A extends show> show<list<A>> {
-  fn show_prec(self: list<A>, prec): str => 
-    "[" + showListHelper(self, prec) + "]"
-}
 
 extend<A extends equality> numeric<list<A>> {
   fn (+) (x, y) => x.list_concat(y)

@@ -6,6 +6,18 @@ type Map<K, V> = list<(K, V)>
 
 fn empty<K, V>(): Map<K, V> => []
 
+fn show_map_helper<K extends show, V extends show>(m: Map<K, V>, prec: int): str =>
+  switch m {
+    case [] => ""
+    case [(k, v)] => k.show_prec(prec + 1) + ": " + v.show_prec(prec + 1)
+    case [(k, v), ..m1] => k.show_prec(prec + 1) + ": " + v.show_prec(prec + 1) + ", " + show_map_helper(m1, prec)
+  }
+
+extend<K extends show, V extends show> show<Map<K, V>> (priority 5) {
+  fn show_prec(m: Map<K, V>, prec: int): str =>
+    "{ " + show_map_helper(m, prec) + " }"
+}
+
 fn insert<K extends equality, V extends equality>(m: Map<K, V>, k: K, v: V): Map<K, V> => 
   switch m {
     case [] => [(k, v)]
