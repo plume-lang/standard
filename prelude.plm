@@ -4,3 +4,4 @@ pub require "datatypes"
 pub require "io"
 
 pub require "io/async"
+pub require "instances/show"
