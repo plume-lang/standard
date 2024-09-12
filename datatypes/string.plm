@@ -26,3 +26,10 @@ extend indexable<str, char> {
 extend<A extends show> show<mut A> {
   fn show_prec(c: mut A, prec: int): str => "mut " + c->show_prec(prec + 1)
 }
+
+fn join_str(xs: list<str>, sep: str): str =>
+  switch xs {
+    case [] => ""
+    case [x] => x
+    case [x, ..xs] => x + sep + join_str(xs, sep)
+  }
