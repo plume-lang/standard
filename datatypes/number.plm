@@ -99,8 +99,8 @@ extend show<float> {
   fn show_prec(c: float, _) => to_string(c)
 }
 
-macro e = 2.718282
-fn expf(x: float): float => pow_float(#e, x)
+e = 2.718282
+fn expf(x: float): float => pow_float(e, x)
 fn exp(x: int): float => expf(x.int_to_float())
 
 fn to_int(x: float): int => float_to_int(x)
