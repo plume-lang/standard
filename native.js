@@ -146,7 +146,7 @@ module.exports = {
     }
   },
 
-  all: (promises) => Promise.all(promises),
+  wait_all: (promises) => Promise.all(promises),
   add_big: (x, y) => x + y,
   sub_big: (x, y) => x - y,
   mul_big: (x, y) => x * y,
