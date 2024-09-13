@@ -11,3 +11,8 @@ extend show<bool> {
 }
 
 fn (!=)<A extends equality>(a: A, b: A): bool => not(a == b)
+
+extend equality<bool> {
+  fn ==(a: bool, b: bool): bool => if (a) b else not(b)
+}
+
