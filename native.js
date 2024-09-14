@@ -165,5 +165,7 @@ module.exports = {
     }
 
     return [null, 'Option', 'Some', res];
-  }
+  },
+
+  str_to_list: (s) => s.split(''),
 }
