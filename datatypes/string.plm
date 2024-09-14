@@ -1,5 +1,8 @@
 require "bool"
 require "std:classes"
+require "std:datatypes/mutable"
+require "std:datatypes/tuple"
+require "std:datatypes/map"
 
 native ("native", "js") "std:native" {
   add_str(x: str, y: str): str
@@ -9,6 +12,7 @@ native ("native", "js") "std:native" {
   get_index_str(x: str, i: int): Option<char>
   str_slice(x: str, start: int, end: int): str
   str_to_list(x: str): list<char>
+  list_to_str(x: list<char>): str
 }
 
 extend foldable<str, char> {
@@ -42,3 +46,158 @@ fn String::join(xs: list<str>, sep: str): str =>
 
 fn String::map<B>(self: str, f: fn(char): B): list<B> =>
   str_to_list(self).map(f)
+
+fn String::filter(self: str, f: fn(char): bool): str =>
+  str_to_list(self).filter(f).list_to_str()
+
+fn String::slice(self: str, start: int, end: int): str =>
+  str_slice(self, start, end)
+
+fn String::length(self: str): int =>
+  string_length(self)
+
+fn String::to_list(self: str): list<char> =>
+  str_to_list(self)
+
+fn String::from_list(xs: list<char>): str =>
+  list_to_str(xs)
+
+fn String::split(self: str, sep: char): list<str> {
+  mut result = []
+  mut current = ""
+
+  mut i = 0
+
+  while *i < String::length(self) {
+    switch self[*i] {
+      case Some(c) => {
+        if c == sep {
+          result = result->list_concat([*current])
+          current = ""
+        } else {
+          current += c.to_string()
+        }
+      }
+      case None {}
+    }
+  }
+
+  result = result->list_concat([*current])
+
+  return *result
+}
+
+uppercase_map: Map<char, char> = [
+  ('a', 'A'),
+  ('b', 'B'),
+  ('c', 'C'),
+  ('d', 'D'),
+  ('e', 'E'),
+  ('f', 'F'),
+  ('g', 'G'),
+  ('h', 'H'),
+  ('i', 'I'),
+  ('j', 'J'),
+  ('k', 'K'),
+  ('l', 'L'),
+  ('m', 'M'),
+  ('n', 'N'),
+  ('o', 'O'),
+  ('p', 'P'),
+  ('q', 'Q'),
+  ('r', 'R'),
+  ('s', 'S'),
+  ('t', 'T'),
+  ('u', 'U'),
+  ('v', 'V'),
+  ('w', 'W'),
+  ('x', 'X'),
+  ('y', 'Y'),
+  ('z', 'Z')
+]
+
+lowercase_map: Map<char, char> = uppercase_map.invert()
+
+fn String::to_upper(self: str): str =>
+  String::map(self, fn (c) => switch uppercase_map.lookup(c) {
+    case Some(u) => u
+    case None => c
+  }).list_to_str()
+
+fn String::to_lower(self: str): str =>
+  String::map(self, fn (c) => switch lowercase_map.lookup(c) {
+    case Some(l) => l
+    case None => c
+  }).list_to_str()
+
+fn String::capitalize(self: str): str =>
+  switch String::to_list(self) {
+    case [] => ""
+    case [c, ..cs] => switch uppercase_map.lookup(c) {
+      case Some(u) => u.to_string() + cs.list_to_str()
+      case None => c.to_string() + cs.list_to_str()
+    }
+  }
+
+fn String::starts_with(self: str, pre: str): bool =>
+  String::slice(self, 0, String::length(pre)) == pre
+
+fn String::ends_with(self: str, suffix: str): bool =>
+  String::slice(self, String::length(self) - String::length(suffix), String::length(self)) == suffix
+
+fn String::trim(self: str): str {
+  mut start = 0
+  mut end = String::length(self)
+
+  while *start < *end and self[*start].or_else(' ') == ' ' {
+    start += 1
+  }
+
+  while *end > *start and self[*end - 1].or_else(' ') == ' ' {
+    end -= 1
+  }
+
+  return String::slice(self, *start, *end)
+}
+
+fn String::trim_start(self: str): str {
+  mut start = 0
+  mut end = String::length(self)
+
+  while *start < *end and self[*start].or_else(' ') == ' ' {
+    start += 1
+  }
+
+  return String::slice(self, *start, *end)
+}
+
+fn String::trim_end(self: str): str {
+  mut start = 0
+  mut end = String::length(self)
+
+  while *end > *start and self[*end - 1].or_else(' ') == ' ' {
+    end -= 1
+  }
+
+  return String::slice(self, *start, *end)
+}
+
+fn String::reverse(self: str): str =>
+  String::to_list(self).reverse().list_to_str()
+
+fn String::replace(self: str, target: str, replacement: str): str {
+  mut result = ""
+  mut i = 0
+
+  while *i < String::length(self) {
+    if String::slice(self, *i, *i + String::length(target)) == target {
+      result += replacement
+      i += String::length(target)
+    } else {
+      result += self[*i].or_else(' ').to_string()
+      i += 1
+    }
+  }
+
+  return *result
+}
