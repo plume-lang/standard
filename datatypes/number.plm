@@ -1,4 +1,5 @@
-require "std:classes"
+require "std:classes/algebra"
+require "std:classes/show"
 
 native ("js", "native") "std:native" {
   add_int(x: int, y: int): int
@@ -11,6 +12,7 @@ native ("js", "native") "std:native" {
   eq_int(x: int, y: int): bool
   lt_int(x: int, y: int): bool
   str_to_int(x: str): Option<int>
+  to_string<A>(x: A): str
 }
 
 // Native float functions

@@ -1,4 +1,5 @@
-require "std:classes"
+require "std:classes/algebra"
+require "std:classes/show"
 
 extend boolean_algebra<bool> {
   fn and(a: bool, b: bool): bool => if (a) b else false
