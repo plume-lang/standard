@@ -1,0 +1,31 @@
+infixr 0 +=
+fn (+=)<A extends numeric>(var: mut A, x: A): A {
+  var = *var + x
+  return *var
+}
+
+infixr 0 -=
+fn (-=)<A extends numeric>(var: mut A, x: A): A {
+  var = *var - x
+  return *var
+}
+
+infixr 0 *=
+fn (*=)<A extends product>(var: mut A, x: A): A {
+  var = *var * x
+  return *var
+}
+
+infixr 0 /=
+fn (/=)<A extends product>(var: mut A, x: A): A {
+  var = *var / x
+  return *var
+}
+
+infixr 0 ^=
+
+fn mutable<A>(x: A): mut A {
+  mut val = x
+
+  return val
+}
