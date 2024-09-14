@@ -76,7 +76,7 @@ fn drop_while<A>(x: [A], f: fn(A): bool): [A] => switch x {
 }
 
 fn span<A>(x: [A], f: fn(A): bool): ([A], [A]) => 
-  (take_while(x, f), drop_while(x, f)[1..])
+  (take_while(x, f), drop_while(x, f).slice(1))
 
 fn split_on<A extends equality>(x: [A], y: A): [[A]] => switch x {
   case [] => []
