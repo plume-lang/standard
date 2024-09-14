@@ -22,15 +22,17 @@ extend traversable<list> {
   }
 }
 
-extend foldable<list> {
-  fn foldl<A, B>(self: list<A>, f: fn(B, A): B, init: B): B => switch self {
-    case [] => init
-    case [x, ..xs] => xs.foldl(f, f(init, x))
-  }
+extend<A> foldable<list<A>, A> {
+  fn reduce<Accumulator>(
+    self: list<A>, 
+    f: fn(Accumulator, A): Accumulator, 
+    init: Accumulator
+  ): Accumulator =>
+    switch self {
+      case [] => init
+      case [x, ..xs] => reduce(xs, f, f(init, x))
+    }
 }
-
-fn len<T extends foldable, A>(x: T<A>): int => 
-  x.foldl(fn (acc, _) => acc + 1, 0)
 
 fn filter<A>(x: list<A>, f: fn(A): bool): list<A> => 
   x.foldl(fn (acc, y) => if (f(y)) acc.list_concat([y]) else acc, [])

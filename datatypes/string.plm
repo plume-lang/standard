@@ -8,6 +8,16 @@ native ("native", "js") "std:native" {
   eq_string(x: str, y: str): bool
   get_index_str(x: str, i: int): Option<char>
   str_slice(x: str, start: int, end: int): str
+  str_to_list(x: str): list<char>
+}
+
+extend foldable<str, char> {
+  fn reduce<Accumulator>(
+    self: str, 
+    f: fn(Accumulator, char): Accumulator, 
+    init: Accumulator
+  ): Accumulator =>
+    reduce(str_to_list(self), f, init)
 }
 
 extend numeric<str> {
@@ -23,13 +33,12 @@ extend indexable<str, char> {
   fn get_index(self: str, i): Option<char> => get_index_str(self, i)
 }
 
-extend<A extends show> show<mut A> {
-  fn show_prec(c: mut A, prec: int): str => "mut " + c->show_prec(prec + 1)
-}
-
-fn join_str(xs: list<str>, sep: str): str =>
+fn String::join(xs: list<str>, sep: str): str =>
   switch xs {
     case [] => ""
     case [x] => x
-    case [x, ..xs] => x + sep + join_str(xs, sep)
+    case [x, ..xs] => x + sep + String::join(xs, sep)
   }
+
+fn String::map<B>(self: str, f: fn(char): B): list<B> =>
+  str_to_list(self).map(f)
