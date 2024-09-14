@@ -1,3 +1,5 @@
+require "std:classes/algebra"
+
 infixr 0 +=
 fn (+=)<A extends numeric>(var: mut A, x: A): A {
   var = *var + x
