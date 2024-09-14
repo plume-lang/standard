@@ -168,4 +168,5 @@ module.exports = {
   },
 
   str_to_list: (s) => s.split(''),
+  list_to_str: (l) => l.join(''),
 }
