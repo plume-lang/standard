@@ -6,7 +6,7 @@ type Map<K, V> = list<(K, V)>
 
 fn empty<K, V>(): Map<K, V> => []
 
-fn insert<K extends equality, V extends equality>(m: Map<K, V>, k: K, v: V): Map<K, V> => 
+fn insert<K extends equality, V>(m: Map<K, V>, k: K, v: V): Map<K, V> => 
   switch m {
     case [] => [(k, v)]
     case [(k1, v1), ..m1] => 
@@ -35,3 +35,9 @@ fn remove<K extends equality, V>(m: Map<K, V>, k: K): Map<K, V> =>
       else
         [(k1, v1)] + remove(m1, k)
   }
+
+fn invert<K, V>(m: Map<K, V>): Map<V, K> =>
+  m.foldl(fn (acc, e) {
+    case (k, v) = e
+    return insert(acc, v, k)
+  }, empty())
