@@ -23,4 +23,4 @@ fn compose<A, B>(a: Result<A, B>, b: Result<A, B>): Result<A, B> => switch a {
 }
 
 infixl 1 |>
-fn (|>)<A, B>(a: Result<A, B>, b: Result<A, B>): Result<A, B> => compose(a, b)
+fn (|>)<A, B>(a: A, f: fn(A): B): B => f(a)
