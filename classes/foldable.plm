@@ -1,0 +1,52 @@
+require "../datatypes/number"
+require "../datatypes/bool"
+
+/* Foldable makes use of functional dependencies to allow the compiler to infer 
+ * the type of the index from the type of the object being indexed. This is useful 
+ * for types like arrays, where the index type is always int.
+ * 
+ * The fold function is a higher-order function that takes a function f and an initial
+ * value init, and applies f to each element of the container, starting with init.
+ */
+interface<Container, Elem> foldable<Container, Elem> with Container => Elem {
+  fn reduce<Accumulator>(
+    self: Container, 
+    f: fn(Accumulator, Elem): Accumulator, 
+    init: Accumulator
+  ): Accumulator
+}
+
+fn len<A, T extends foldable<A>>(xs: T): int =>
+  xs.reduce(fn (acc, _) => acc + 1, 0)
+
+fn sum<T extends foldable<int>>(xs: T): int =>
+  xs.reduce(fn (acc, x) => acc + x, 0)
+
+fn product<T extends foldable<int>>(xs: T): int =>
+  xs.reduce(fn (acc, x) => acc * x, 1)
+
+fn all<T extends foldable<bool>>(xs: T): bool =>
+  xs.reduce(fn (acc, x) => acc and x, true)
+
+fn any<T extends foldable<bool>>(xs: T): bool =>
+  xs.reduce(fn (acc, x) => acc or x, false)
+
+fn foldl<A, T extends foldable<A>, B>(
+  xs: T, 
+  f: fn(B, A): B, 
+  init: B
+): B =>
+  xs.reduce(fn (acc, x) => f(acc, x), init)
+
+fn foldr<A, T extends foldable<A>, B>(
+  xs: T, 
+  f: fn(A, B): B, 
+  init: B
+): B =>
+  xs.reduce(fn (acc, x) => f(x, acc), init)
+
+fn elem<A extends equality, T extends foldable<A>>(
+  xs: T, 
+  y: A
+): bool =>
+  xs.reduce(fn (acc, z) => acc or z == y, false)

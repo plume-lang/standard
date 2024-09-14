@@ -1,0 +1,5 @@
+interface<A> show<A> {
+  fn show_prec(a: A, prec: int): str
+}
+
+fn show<A extends show>(a: A): str => a.show_prec(0)

@@ -1,0 +1,3 @@
+interface<T> traversable<T> {
+  fn map<A, B>(self: T<A>, f: fn(A): B): T<B>
+}

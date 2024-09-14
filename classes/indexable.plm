@@ -1,0 +1,7 @@
+/* Indexable makes use of functional dependencies to allow the compiler to infer 
+ * the type of the index from the type of the object being indexed. This is useful 
+ * for types like arrays, where the index type is always int.
+ */
+interface<Container, Item> indexable<Container, Item> with Container => Item {
+  fn get_index(self: Container, i: int): Option<Item>
+}
