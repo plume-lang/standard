@@ -24,26 +24,6 @@ fn unless<A>(cond: bool, a: fn(): A): Option<A> =>
     return Some(a())
   }
 
-// Defining control flow constructrs
-type Control<A> { 
-  Return(A),
-  Break,
-  Continue
-}
-
-// Implementing a while loop using a recursive function and 
-// the Control type.
-fn while_<A>(cond: fn(): bool, body: fn(): Control<A>): Option<A> =>
-  if cond() {
-    return switch body() {
-      case Return(x) => Some(x)
-      case Break => None
-      case Continue => while_(cond, body)
-    }
-  } else {
-    return None
-  }
-
 extend<A> boolean_algebra<Option<A>> {
   fn and(a: Option<A>, b: Option<A>): Option<A> => switch a {
     case Some(_) => b
@@ -100,3 +80,9 @@ fn is_some<A>(x: Option<A>): bool => switch x {
 }
 
 fn is_none<A>(x: Option<A>): bool => not is_some(x)
+
+fn values<A>(xs: list<Option<A>>): list<A> => switch xs {
+  case [] => []
+  case [Some(x), ..ys] => [x] + values(ys)
+  case [None, ..ys] => values(ys)
+}
