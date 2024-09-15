@@ -47,6 +47,10 @@ fn String::join(xs: list<str>, sep: str): str =>
 fn String::map<B>(self: str, f: fn(char): B): list<B> =>
   str_to_list(self).map(f)
 
+extend (self: str) {
+  fn map<B>(f: fn(char): B): list<B> => str_to_list(self).map(f)
+}
+
 fn String::filter(self: str, f: fn(char): bool): str =>
   str_to_list(self).filter(f).list_to_str()
 

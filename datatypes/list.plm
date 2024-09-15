@@ -15,8 +15,8 @@ extend<A> indexable<list<A>, A> {
   fn get_index(self: list<A>, i): Option<A> => ffi_get_index(self, i)
 }
 
-extend traversable<list> {
-  fn map<A, B>(self: list<A>, f: fn(A): B): list<B> => switch self {
+extend<A> (self: list<A>) {
+  fn map<B>(f: fn(A): B): list<B> => switch self {
     case [] => []
     case [x, ..xs] => [f(x)].list_concat(xs.map(f))
   }
@@ -37,12 +37,9 @@ extend<A> foldable<list<A>, A> {
 fn filter<A>(x: list<A>, f: fn(A): bool): list<A> => 
   x.foldl(fn (acc, y) => if (f(y)) acc.list_concat([y]) else acc, [])
 
-fn elem<T extends foldable, A extends equality>(x: T<A>, y: A): bool => 
-  x.foldl(fn (acc, z) => acc or z == y, false)
-
 extend<A extends equality> numeric<list<A>> {
   fn (+) (x, y) => x.list_concat(y)
-  fn (-) (x, y) => x.filter(fn (z) => not elem(y, z))
+  fn (-) (x, y) => x.filter(fn (z) => true)
 }
 
 extend<A extends equality> equality<list<A>> {
@@ -60,8 +57,8 @@ fn slice<A>(xs: [A], start: int): [A] => switch (xs, start) {
   case ([?, ..ys], ?) => slice(ys, start - 1)
 }
 
-fn find<T extends foldable, A, B>(x: T<(A, B)>, f: fn(A): bool): Option<B> =>
-  x.foldl(fn (acc, tp) => switch tp {
+fn find<A, B, T extends foldable<(A, B)>>(x: T, f: fn(A): bool): Option<B> =>
+  x.reduce(fn (acc, tp) => switch tp {
     case tuple(a, b) => if (f(a)) Some(b) else acc
   }, None)
 
@@ -179,18 +176,6 @@ fn take<A>(xs: list<A>, count: int): list<A> =>
     case ([], ?) => []
     case ([x, ..xs], 1) => [x]
     case ([y, ..ys], ?) => [y].list_concat(take(ys, count - 1))
-  }
-
-fn any<A>(f: fn(A): bool, xs: list<A>): bool =>
-  switch xs {
-    case [] => false
-    case [y, ..ys] => f(y) or any(f, ys)
-  }
-  
-fn all<A>(f: fn(A): bool, xs: list<A>): bool =>
-  switch xs {
-    case [] => false
-    case [y, ..ys] => f(y) and all(f, ys)
   }
 
 type ControlFlow<A> {

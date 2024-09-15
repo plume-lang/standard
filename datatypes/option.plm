@@ -43,8 +43,8 @@ fn or_else<A>(a: Option<A>, b: A): A => switch a {
   case None => b
 }
 
-extend traversable<Option> {
-  fn map<A, B>(a: Option<A>, f: fn(A): B): Option<B> => switch a {
+extend<A> (self: Option<A>) {
+  fn map<B>(f: fn(A): B): Option<B> => switch self {
     case Some(x) => Some(f(x))
     case None => None
   }
