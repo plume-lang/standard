@@ -1,0 +1,30 @@
+fn constant<A, B>(value: A): fn(B): A => fn(_: B): A => value
+
+fn compose<A, B, C>(f: fn(B): C, g: fn(A): B): fn(A): C =>
+  fn(x: A): C => f(g(x))
+
+fn curry2<A, B, C>(f: fn(A, B): C): fn(A): fn(B): C =>
+  fn(x: A) => fn(y: B) => f(x, y)
+
+fn uncurry2<A, B, C>(f: fn(A): fn(B): C): fn(A, B): C =>
+  fn(x: A, y: B): C => f(x)(y)
+
+fn curry3<A, B, C, D>(f: fn(A, B, C): D): fn(A): fn(B): fn(C): D =>
+  fn(x: A) => fn(y: B) => fn(z: C) => f(x, y, z)
+
+fn uncurry3<A, B, C, D>(f: fn(A): fn(B): fn(C): D): fn(A, B, C): D =>
+  fn(x: A, y: B, z: C): D => f(x)(y)(z)
+
+fn curry4<A, B, C, D, E>(f: fn(A, B, C, D): E): fn(A): fn(B): fn(C): fn(D): E =>
+  fn(a: A) => fn(b: B) => fn(c: C) => fn(d: D) => f(a, b, c, d)
+
+fn uncurry4<A, B, C, D, E>(f: fn(A): fn(B): fn(C): fn(D): E): fn(A, B, C, D): E =>
+  fn(a: A, b: B, c: C, d: D): E => f(a)(b)(c)(d)
+
+fn flip<A, B, C>(f: fn(A, B): C): fn(B, A): C =>
+  fn(x: B, y: A): C => f(y, x)
+
+fn id<A>(x: A): A => x
+
+infixl 1 |>
+fn (|>)<A, B>(a: A, f: fn(A): B): B => f(a)
