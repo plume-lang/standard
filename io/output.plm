@@ -3,6 +3,8 @@ require "std:datatypes/unit"
 native ("native", "js") "std:native" {
   ffi_print(x: str): int
   ffi_println(x: str): int
+
+  debug<A>(x: A): A
 }
 
 fn vprint<A extends show>(xs: ..A): unit {
