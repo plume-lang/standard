@@ -192,3 +192,23 @@ fn all<A>(f: fn(A): bool, xs: list<A>): bool =>
     case [] => false
     case [y, ..ys] => f(y) and all(f, ys)
   }
+
+type ControlFlow<A> {
+  Continue,
+  Break,
+  Return(A)
+}
+
+fn each<A, T extends foldable<A>, B>(xs: T, f: fn(A): ControlFlow<B>): Option<B> {
+  result = xs.reduce(fn (acc, x) => switch acc {
+    case Continue => f(x)
+    case Break => Break
+    case Return(y) => Return(y)
+  }, Continue)
+
+  return switch result {
+    case Continue => None
+    case Break => None
+    case Return(y) => Some(y)
+  }
+}
