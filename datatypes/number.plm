@@ -12,7 +12,13 @@ native ("js", "native") "std:native" {
   eq_int(x: int, y: int): bool
   lt_int(x: int, y: int): bool
   str_to_int(x: str): Option<int>
+
+  ceil(x: float): float
+  floor(x: float): float
+
   to_string<A>(x: A): str
+
+  random(): float
 }
 
 // Native float functions
@@ -67,12 +73,11 @@ extend convertible<str, int> {
   fn convert(x) => str_to_int(x)
 }
 
-// Defining math functions
+fn abs<A extends (numeric, ordering, default)>(x: A): A => 
+  if x < default() then x.negate() else x
 
-// fn (/) (d: float) => div_float(c, d)
-// fn (%) (d: float) => mod_float(c, d)
-// fn (-) (d: float) => sub_float(c, d)
-// fn (^) (d: float) => pow_float(c, d)
+fn max<A extends ordering>(x: A, y: A): A => if x < y then y else x
+fn min<A extends ordering>(x: A, y: A): A => if x < y then x else y
 
 extend numeric<float> {
   fn (+) (c: float, d: float) => add_float(c, d)
@@ -102,8 +107,13 @@ extend show<float> {
 }
 
 e = 2.718282
-fn expf(x: float): float => pow_float(e, x)
-fn exp(x: int): float => expf(x.int_to_float())
 
 fn to_int(x: float): int => float_to_int(x)
 fn to_float(x: int): float => int_to_float(x)
+
+fn Float::power(x: float, y: float): float => pow_float(x, y)
+fn Float::exp(x: float): float => pow_float(e, x)
+
+fn exp(x: int): float => Float::exp(x.int_to_float())
+
+fn truncate(x: float): int => x.to_int()
