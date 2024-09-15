@@ -41,3 +41,44 @@ fn invert<K, V>(m: Map<K, V>): Map<V, K> =>
     case (k, v) = e
     return insert(acc, v, k)
   }, empty())
+
+fn combine<K, V>(m1: Map<K, V>, m2: Map<K, V>, f: fn(V, V): V): Map<K, V> =>
+  m1.foldl(fn (acc, e) {
+    case (k, v) = e
+    return insert(acc, k, switch lookup(m2, k) {
+      case Some(v2) => f(v, v2)
+      case None => v
+    })
+  }, m2)
+
+fn has_key<K, V>(m: Map<K, V>, k: K): bool =>
+  switch lookup(m, k) {
+    case Some(_) => true
+    case None => false
+  }
+
+fn is_empty<K, V>(m: Map<K, V>): bool => m == []
+
+fn keys<K, V>(m: Map<K, V>): list<K> =>
+  m.foldl(fn (acc, e) {
+    case (k, _) = e
+    return [k].list_concat(acc)
+  }, [])
+
+fn values<K, V>(m: Map<K, V>): list<V> =>
+  m.foldl(fn (acc, e) {
+    case (_, v) = e
+    return [v].list_concat(acc)
+  }, [])
+
+fn merge<K, V>(m1: Map<K, V>, m2: Map<K, V>): Map<K, V> =>
+  m1.foldl(fn (acc, e) {
+    case (k, v) = e
+    return insert(acc, k, v)
+  }, m2)
+
+fn upsert<K extends equality, V>(m: Map<K, V>, k: K, f: fn(Option<V>): V): Map<K, V> =>
+  switch lookup(m, k) {
+    case Some(v) => insert(m, k, f(Some(v)))
+    case None => insert(m, k, f(None))
+  }
