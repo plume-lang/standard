@@ -188,7 +188,6 @@ module.exports = {
 
   regex_exec: (s, re) => {
     const match = re.exec(s);
-    console.log(re)
     if (match === null) {
       return [null, 'Option', 'None'];
     }
