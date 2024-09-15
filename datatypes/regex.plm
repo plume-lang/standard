@@ -1,0 +1,19 @@
+native ("js", "native") "std:native" {
+  regex_match(x: str, re: regex): bool
+  regex_replace(x: str, re: regex, replacement: str): str
+  regex_exec(x: str, re: regex): Option<str>
+  regex_exec_all(x: str, re: regex): list<str>
+}
+
+fn Regex::match(self: str, re: regex): bool =>
+  regex_match(self, re)
+
+fn Regex::replace(self: str, re: regex, replacement: str): str =>
+  regex_replace(self, re, replacement)
+
+fn Regex::exec(self: str, re: regex): Option<str> =>
+  regex_exec(self, re)
+
+fn Regex::exec_all(self: str, re: regex): list<str> =>
+  regex_exec_all(self, re)
+  
