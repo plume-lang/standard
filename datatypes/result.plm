@@ -16,11 +16,3 @@ fn or_error<A, B>(a: Option<A>, f: fn(): B): Result<A, B> => switch a {
   case Some(x) => Ok(x)
   case None => Error(f())
 }
-
-fn compose<A, B>(a: Result<A, B>, b: Result<A, B>): Result<A, B> => switch a {
-  case Ok(x) => Ok(x)
-  case Error(_) => b
-}
-
-infixl 1 |>
-fn (|>)<A, B>(a: A, f: fn(A): B): B => f(a)
