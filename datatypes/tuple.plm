@@ -15,3 +15,7 @@ fn fst<A, B>(t: tuple<A, B>): A => switch t {
 fn snd<A, B>(t: tuple<A, B>): B => switch t {
   case tuple(_, b) => b
 }
+
+fn swap<A, B>(t: tuple<A, B>): tuple<B, A> => switch t {
+  case tuple(a, b) => tuple(b, a)
+}
