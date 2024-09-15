@@ -169,4 +169,40 @@ module.exports = {
 
   str_to_list: (s) => s.split(''),
   list_to_str: (l) => l.join(''),
+
+  ceil: (x) => Math.ceil(x),
+  floor: (x) => Math.floor(x),
+  random: () => Math.random(),
+
+  debug: (x) => {
+    console.log(x);
+    return x;
+  },
+
+  regex_match: (s, re) => {
+    const regex = new RegExp(re);
+    return regex.test(s);
+  },
+
+  regex_replace: (s, re, replace) => s.replace(re, replace),
+
+  regex_exec: (s, re) => {
+    const match = re.exec(s);
+    console.log(re)
+    if (match === null) {
+      return [null, 'Option', 'None'];
+    }
+
+    return [null, 'Option', 'Some', match];
+  },
+
+  regex_exec_all: (s, re) => {
+    const matches = [];
+    let match;
+    while ((match = re.exec(s)) !== null) {
+      matches.push(match);
+    }
+
+    return matches;
+  }
 }
