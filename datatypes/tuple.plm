@@ -19,3 +19,9 @@ fn snd<A, B>(t: tuple<A, B>): B => switch t {
 fn swap<A, B>(t: tuple<A, B>): tuple<B, A> => switch t {
   case tuple(a, b) => tuple(b, a)
 }
+
+extend<A, B> (self: tuple<A, B>) {
+  fn map<C>(f: fn(A): C): tuple<C, B> => switch self {
+    case tuple(a, b) => tuple(f(a), b)
+  }
+}
