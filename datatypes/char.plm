@@ -1,6 +1,6 @@
 require "std:classes"
 
-native ("native", "js") "std:native" {
+native "std:native" {
   char_to_string(x: char): str
   eq_char(x: char, y: char): bool
 }

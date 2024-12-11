@@ -1,7 +1,7 @@
 require "std:classes/algebra"
 require "std:classes/show"
 
-native ("js", "native") "std:native" {
+native "std:native" {
   add_int(x: int, y: int): int
   sub_int(x: int, y: int): int
   mul_int(x: int, y: int): int
@@ -22,7 +22,7 @@ native ("js", "native") "std:native" {
 }
 
 // Native float functions
-native ("native", "js") "std:native" {
+native "std:native" {
   add_float(x: float, y: float): float
   sub_float(x: float, y: float): float
   mul_float(x: float, y: float): float

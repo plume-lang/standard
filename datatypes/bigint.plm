@@ -1,6 +1,6 @@
 type bigint {}
 
-native ("js", "native") "std:native" {
+native "std:native" {
   add_big(x: int, y: int): int
   sub_big(x: int, y: int): int
   mul_big(x: int, y: int): int

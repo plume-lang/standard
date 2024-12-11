@@ -4,7 +4,7 @@ require "std:datatypes/mutable"
 require "std:datatypes/tuple"
 require "std:datatypes/map"
 
-native ("native", "js") "std:native" {
+native "std:native" {
   add_str(x: str, y: str): str
   mul_str(x: str, y: int): str
   string_length(x: str): int

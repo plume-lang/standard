@@ -1,6 +1,6 @@
 require "std:datatypes/unit"
 
-native ("native", "js") "std:native" {
+native "std:native" {
   ffi_print(x: str): int
   ffi_println(x: str): int
 

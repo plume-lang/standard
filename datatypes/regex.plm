@@ -1,4 +1,4 @@
-native ("js", "native") "std:native" {
+native "std:native" {
   regex_match(x: str, re: regex): bool
   regex_replace(x: str, re: regex, replacement: str): str
   regex_exec(x: str, re: regex): Option<str>

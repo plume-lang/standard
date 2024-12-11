@@ -5,7 +5,7 @@ require "option"
 require "bool"
 require "char"
 
-native ("native", "js") "std:native" {
+native "std:native" {
   list_concat<A>(x: [A], y: [A]): [A]
   ffi_get_index<A>(x: [A], i: int): Option<A>
   ffi_slice_list<A>(x: [A], start: int, end: int): [A]

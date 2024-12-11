@@ -1,12 +1,8 @@
-native ("native", "js") "std:native" {
+native "std:native" {
   get_args(): [str]
   execute_command(path: str): int
 }
 
-native "js" "std:native" {
+native "std:native" {
   input(pre: str): async<str>
-}
-
-native "native" "std:native" {
-  input(pre: str): str
 }
